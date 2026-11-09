@@ -3,47 +3,99 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#fff4e9">
-<title>شمع هلو | روشنایی دست‌ساز</title>
+<title>شمع هلو | فروشگاه شمع‌های دست‌ساز</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-:root{--cream:#fff8f0;--peach:#f7c6a5;--deep:#8b4b32;--gold:#c28a3b;--ink:#49352d;--white:#fff}
-*{box-sizing:border-box}body{margin:0;font-family:Tahoma,Arial,sans-serif;background:var(--cream);color:var(--ink);line-height:1.9}
-header{position:sticky;top:0;z-index:5;background:#fffaf4eF;backdrop-filter:blur(12px);border-bottom:1px solid #f0dfcf}
-nav{max-width:1080px;margin:auto;padding:12px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+:root{--cream:#fff8f0;--peach:#f7c6a5;--deep:#8b4b32;--gold:#c28a3b;--ink:#49352d;--line:#f0dfcf}
+*{box-sizing:border-box}body{margin:0;font-family:Tahoma,Arial,sans-serif;background:var(--cream);color:var(--ink);line-height:1.85}
+header{position:sticky;top:0;z-index:5;background:#fffaf4ed;backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+nav{max-width:1080px;margin:auto;padding:12px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .brand{font-weight:900;color:var(--deep);font-size:1.25rem}.brand span{color:var(--gold)}
-nav a{color:var(--deep);text-decoration:none;font-size:.92rem;margin-right:12px}
-.hero{max-width:1080px;margin:28px auto 12px;padding:34px 22px;display:grid;grid-template-columns:1.2fr .8fr;gap:20px;align-items:center}
+nav a,nav button{color:var(--deep);text-decoration:none;font-size:.9rem;margin:3px;border:0;background:none;cursor:pointer;font-family:inherit}
+.hero{max-width:1080px;margin:28px auto 12px;padding:20px 18px;display:grid;grid-template-columns:1.2fr .8fr;gap:20px;align-items:center}
 .hero-card{background:linear-gradient(135deg,#ffe7d4,#fff7eb);border:1px solid #f2d5bf;border-radius:28px;padding:30px;box-shadow:0 12px 35px #9c67401a}
-h1{font-size:clamp(2rem,5vw,3.2rem);line-height:1.5;margin:0 0 10px;color:var(--deep)}
-.hero p{margin:0 0 20px;color:#725447}.cta{display:inline-block;background:var(--deep);color:white;padding:10px 20px;border-radius:999px;text-decoration:none}
-.candle-art{min-height:240px;border-radius:28px;background:radial-gradient(circle at 50% 30%,#fff 0 18%,transparent 19%),linear-gradient(145deg,#f4c69f,#e9a77c);display:grid;place-items:center;font-size:6rem;box-shadow:inset 0 0 40px #fff6}
+h1{font-size:clamp(2rem,5vw,3.2rem);line-height:1.5;margin:0 0 10px;color:var(--deep)}.hero p{margin:0 0 20px;color:#725447}
+.candle-art{min-height:240px;border-radius:28px;background:radial-gradient(circle at 50% 30%,#fff 0 18%,transparent 19%),linear-gradient(145deg,#f4c69f,#e9a77c);display:grid;place-items:center;font-size:6rem}
 section{max-width:1080px;margin:30px auto;padding:0 18px}.section-title{text-align:center;color:var(--deep);font-size:1.6rem;margin-bottom:6px}.sub{text-align:center;color:#927769;margin-top:0}
-.products{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:20px}
-.product{background:white;border:1px solid #f0dfcf;border-radius:20px;padding:18px;text-align:center;box-shadow:0 8px 24px #71472a0b}
-.product .photo{height:150px;border-radius:15px;background:#fff1e5;display:grid;place-items:center;font-size:3.5rem}
-.product h3{margin:12px 0 2px;color:var(--deep)}.product p{margin:0;color:#8c766a;font-size:.9rem}
-.notice{background:#fff0df;border:1px dashed #d9aa7c;border-radius:18px;padding:18px;text-align:center;margin:20px auto;color:#80583f}
-.about{background:#fff;border-radius:22px;padding:22px;border:1px solid #f0dfcf;text-align:center}
+.products{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:20px}.product,.panel,.about{background:white;border:1px solid var(--line);border-radius:20px;padding:16px;box-shadow:0 8px 24px #71472a0b}
+.product{text-align:center}.photo{height:165px;border-radius:15px;background:#fff1e5;display:grid;place-items:center;overflow:hidden;font-size:3.5rem}.photo img{width:100%;height:100%;object-fit:cover}
+.product h3{margin:10px 0 2px;color:var(--deep)}.muted{color:#8c766a;font-size:.9rem}.price{font-weight:bold;color:#9a612b;margin:5px}
+button,.btn{border:0;background:var(--deep);color:white;padding:10px 16px;border-radius:12px;cursor:pointer;font:inherit;text-decoration:none;display:inline-block}
+button.secondary,.btn.secondary{background:#f8e8d9;color:var(--deep)}button:disabled{opacity:.5;cursor:not-allowed}
+.notice{background:#fff0df;border:1px dashed #d9aa7c;border-radius:16px;padding:14px;text-align:center;margin:18px auto;color:#80583f}
+.tools{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:16px 0}.tools input{max-width:320px}
+input,textarea,select{width:100%;padding:12px;border:1px solid #e7d3c2;border-radius:12px;background:#fffdf9;font:inherit;color:var(--ink);margin:5px 0 12px}
+label{font-size:.9rem;color:#765747}form{max-width:600px;margin:12px auto}.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cartline,.orderline{display:flex;justify-content:space-between;gap:10px;padding:10px;border-bottom:1px solid var(--line);align-items:center}
+.hidden{display:none!important}.panel{max-width:760px;margin:18px auto}.status{font-weight:bold;color:#8b4b32}.small{font-size:.82rem;color:#8b766a}
 footer{text-align:center;padding:24px;color:#927769;font-size:.85rem}
-@media(max-width:700px){.hero{grid-template-columns:1fr;margin-top:14px}.candle-art{min-height:170px}.products{grid-template-columns:repeat(2,1fr)}nav a{margin-right:5px;font-size:.8rem}}
-@media(max-width:420px){.products{grid-template-columns:1fr}}
+@media(max-width:700px){.hero{grid-template-columns:1fr;margin-top:14px}.candle-art{min-height:160px}.products{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:430px){.products{grid-template-columns:1fr}.row2{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-<header><nav><div class="brand">🍑 شمع <span>هلو</span></div><div><a href="#products">محصولات</a><a href="#about">درباره ما</a></div></nav></header>
+<header><nav><div class="brand">🍑 شمع <span>هلو</span></div><div><a href="#products">محصولات</a><a href="#cart">سبد خرید <b id="cartCount">۰</b></a><a href="#tracking">پیگیری</a><a href="#about">درباره ما</a><button id="adminToggle" class="secondary">مدیریت</button></div></nav></header>
 <main>
-<div class="hero">
- <div class="hero-card"><h1>گرمایی کوچک،<br>حسی بزرگ ✨</h1><p>به دنیای شمع‌های دست‌ساز شمع هلو خوش آمدی؛ جایی برای لحظه‌های آرام و دوست‌داشتنی.</p><a class="cta" href="#products">دیدن محصولات</a></div>
- <div class="candle-art" aria-label="تصویر تزئینی شمع">🕯️</div>
-</div>
-<section id="products"><h2 class="section-title">محصولات شمع هلو</h2><p class="sub">شمع‌های دست‌ساز ما به‌زودی اینجا قرار می‌گیرند.</p>
- <div class="products">
-  <article class="product"><div class="photo">🕯️</div><h3>شمع دست‌ساز</h3><p>عکس و قیمت به‌زودی اضافه می‌شود</p></article>
-  <article class="product"><div class="photo">🌷</div><h3>شمع تزئینی</h3><p>عکس و قیمت به‌زودی اضافه می‌شود</p></article>
-  <article class="product"><div class="photo">🍯</div><h3>شمع ویژه</h3><p>عکس و قیمت به‌زودی اضافه می‌شود</p></article>
- </div>
- <div class="notice">برای ثبت سفارش، ابتدا عکس و قیمت محصولات واقعی‌ات را اضافه می‌کنیم. 🌼</div>
-</section>
-<section id="about"><div class="about"><h2 class="section-title">درباره شمع هلو</h2><p>شمع هلو یک فروشگاه کوچک برای شمع‌های دست‌ساز و خاص است. هر محصول با سلیقه و دقت آماده می‌شود.</p></div></section>
-</main>
-<footer>© شمع هلو — ساخته‌شده با عشق و هنر دست 🍑</footer>
+<div class="hero"><div class="hero-card"><h1>گرمایی کوچک،<br>حسی بزرگ ✨</h1><p>به دنیای شمع‌های دست‌ساز شمع هلو خوش آمدی؛ جایی برای لحظه‌های آرام و دوست‌داشتنی.</p><a class="btn" href="#products">دیدن محصولات</a></div><div class="candle-art">🕯️</div></div>
+<section id="products"><h2 class="section-title">محصولات شمع هلو</h2><p class="sub">محصول دلخواهت را انتخاب کن و به سبد خرید اضافه کن.</p><div id="productGrid" class="products"><div class="notice">در حال دریافت محصولات…</div></div><p id="loadMsg" class="small" style="text-align:center"></p></section>
+<section id="cart"><h2 class="section-title">🛒 سبد خرید</h2><div class="panel"><div id="cartItems"><p class="muted">سبد خرید خالی است.</p></div><h3>مجموع: <span id="cartTotal">۰</span> تومان</h3><form id="checkoutForm"><h3>اطلاعات سفارش</h3><label>نام و نام خانوادگی</label><input name="customer" required minlength="2" maxlength="80" placeholder="نام شما"><label>شماره موبایل</label><input name="phone" required inputmode="tel" placeholder="09xxxxxxxxx"><label>آدرس کامل</label><textarea name="address" required minlength="5" maxlength="500" rows="3" placeholder="استان، شهر، خیابان، پلاک…"></textarea><label>توضیحات (اختیاری)</label><textarea name="note" maxlength="500" rows="2" placeholder="رنگ یا توضیح دلخواه"></textarea><button type="submit" id="checkoutBtn">ثبت سفارش</button><p class="small">پس از ثبت، کد پیگیری نمایش داده می‌شود. سفارش‌ها در پایگاه داده ذخیره می‌شوند.</p></form><div id="checkoutResult" class="notice hidden"></div></div></section>
+<section id="tracking"><h2 class="section-title">پیگیری سفارش</h2><div class="panel"><form id="trackForm"><label>کد پیگیری</label><input name="code" required minlength="8" maxlength="12" placeholder="کد روی رسید"><label>شماره موبایل سفارش</label><input name="phone" required inputmode="tel" placeholder="شماره‌ای که سفارش دادی"><button type="submit">بررسی وضعیت</button></form><div id="trackResult" class="notice hidden"></div></div></section>
+<section id="admin" class="hidden"><h2 class="section-title">پنل مدیریت شمع هلو 🔐</h2><div class="panel"><div id="adminLogin"><p class="muted">برای ورود، حساب مدیریت Supabase لازم است.</p><form id="loginForm"><label>ایمیل مدیریت</label><input name="email" type="email" required><label>رمز عبور</label><input name="password" type="password" required><button>ورود</button></form></div><div id="adminArea" class="hidden"><div class="tools"><button id="logoutBtn" class="secondary">خروج</button><button id="refreshOrders" class="secondary">به‌روزرسانی سفارش‌ها</button></div><h3>افزودن محصول</h3><form id="productForm"><label>نام محصول</label><input name="name" required maxlength="100"><label>توضیحات</label><textarea name="description" rows="2" maxlength="500"></textarea><div class="row2"><div><label>قیمت (تومان)</label><input name="price" type="number" min="0" required></div><div><label>لینک عکس محصول</label><input name="image" type="url" placeholder="https://…"></div></div><button>ذخیره محصول</button></form><h3>سفارش‌ها</h3><div id="adminOrders" class="muted">هنوز سفارشی بارگذاری نشده است.</div></div></div></section>
+<section id="about"><div class="about"><h2 class="section-title">درباره شمع هلو</h2><p>شمع هلو فروشگاهی برای شمع‌های دست‌ساز و خاص است. هر محصول با سلیقه و دقت آماده می‌شود. 🍯</p></div></section>
+</main><footer>© شمع هلو — ساخته‌شده با هنر دست 🍑</footer>
+<script>
+const SUPABASE_URL='https://dlavslutbtcohkwhkntw.supabase.co';
+const SUPABASE_KEY='sb_publishable_tVPZeaHIVMeM9M_f9BwDNQ_Q5Af1rkY';
+const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const fmt=n=>Number(n||0).toLocaleString('fa-IR');
+let products=[],cart={};
+const el=id=>document.getElementById(id);
+function safe(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+async function loadProducts(){
+ const {data,error}=await db.from('candle_products').select('id,name,description,price_toman,image_url').eq('active',true).order('created_at',{ascending:false});
+ if(error){el('productGrid').innerHTML='<div class="notice">دریافت محصولات با خطا روبه‌رو شد.</div>';el('loadMsg').textContent=error.message;return;}
+ products=data||[];
+ el('productGrid').innerHTML=products.length?products.map(p=>'<article class="product"><div class="photo">'+(p.image_url?'<img src="'+safe(p.image_url)+'" alt="'+safe(p.name)+'">':'🕯️')+'</div><h3>'+safe(p.name)+'</h3><p class="muted">'+safe(p.description)+'</p><div class="price">'+fmt(p.price_toman)+' تومان</div><button onclick="addCart(\''+p.id+'\')">افزودن به سبد</button></article>').join(''):'<div class="notice">هنوز محصولی ثبت نشده است. به‌زودی عکس و محصولات واقعی اینجا قرار می‌گیرند 🌷</div>';
+}
+window.addCart=id=>{cart[id]=(cart[id]||0)+1;renderCart();};
+function renderCart(){
+ const entries=Object.entries(cart).filter(([id,q])=>q>0);let total=0;
+ el('cartItems').innerHTML=entries.length?entries.map(([id,q])=>{const p=products.find(x=>x.id===id);if(!p)return '';total+=Number(p.price_toman)*q;return '<div class="cartline"><span>'+safe(p.name)+' × '+fmt(q)+'</span><span>'+fmt(p.price_toman*q)+' تومان <button class="secondary" onclick="removeCart(\''+id+'\')">−</button></span></div>';}).join(''):'<p class="muted">سبد خرید خالی است.</p>';
+ el('cartTotal').textContent=fmt(total);el('cartCount').textContent=fmt(entries.reduce((s,[,q])=>s+q,0));
+}
+window.removeCart=id=>{cart[id]=(cart[id]||0)-1;if(cart[id]<=0)delete cart[id];renderCart();};
+el('checkoutForm').addEventListener('submit',async e=>{
+ e.preventDefault();if(!Object.keys(cart).length){alert('سبد خرید خالی است.');return;}
+ const f=new FormData(e.target),items=Object.entries(cart).map(([product_id,quantity])=>({product_id,quantity}));
+ const btn=el('checkoutBtn');btn.disabled=true;btn.textContent='در حال ثبت…';
+ const {data,error}=await db.rpc('place_candle_order',{p_customer_name:f.get('customer'),p_phone:f.get('phone'),p_address:f.get('address'),p_note:f.get('note')||'',p_items:items});
+ btn.disabled=false;btn.textContent='ثبت سفارش';
+ if(error){alert('ثبت سفارش انجام نشد: '+error.message);return;}
+ const result=Array.isArray(data)?data[0]:data;el('checkoutResult').classList.remove('hidden');el('checkoutResult').innerHTML='🎉 سفارش با موفقیت ثبت شد!<br>کد پیگیری: <b>'+safe(result.tracking_code)+'</b><br>مبلغ: '+fmt(result.total_toman)+' تومان<br><button class="secondary" onclick="navigator.clipboard?.writeText(\''+safe(result.tracking_code)+'\')">کپی کد</button><br><span class="small">کد پیگیری را نگه دار.</span>';
+ cart={};renderCart();e.target.reset();
+});
+el('trackForm').addEventListener('submit',async e=>{
+ e.preventDefault();const f=new FormData(e.target),box=el('trackResult');box.classList.remove('hidden');box.textContent='در حال بررسی…';
+ const {data,error}=await db.rpc('track_candle_order',{p_code:f.get('code'),p_phone:f.get('phone')});
+ if(error){box.textContent='بررسی سفارش با خطا روبه‌رو شد.';return;}
+ const o=Array.isArray(data)?data[0]:null;box.textContent=o?'وضعیت: '+o.order_status+' | مبلغ: '+fmt(o.order_total)+' تومان | تاریخ ثبت: '+new Date(o.order_created_at).toLocaleDateString('fa-IR'):'سفارشی با این کد و شماره پیدا نشد.';
+});
+el('adminToggle').onclick=()=>{el('admin').classList.toggle('hidden');el('admin').scrollIntoView({behavior:'smooth'});};
+async function checkAdmin(){
+ const {data:{user}}=await db.auth.getUser();if(!user)return false;
+ const {data,error}=await db.from('candle_admins').select('user_id').eq('user_id',user.id).maybeSingle();
+ if(error||!data)return false;el('adminLogin').classList.add('hidden');el('adminArea').classList.remove('hidden');await loadOrders();return true;
+}
+el('loginForm').addEventListener('submit',async e=>{e.preventDefault();const f=new FormData(e.target);const {error}=await db.auth.signInWithPassword({email:f.get('email'),password:f.get('password')});if(error){alert('ورود ناموفق بود: '+error.message);return;}if(!(await checkAdmin())){await db.auth.signOut();alert('این حساب هنوز دسترسی مدیریت شمع هلو ندارد. ابتدا باید مدیر در پایگاه داده مجاز شود.');}});
+el('logoutBtn').onclick=async()=>{await db.auth.signOut();el('adminArea').classList.add('hidden');el('adminLogin').classList.remove('hidden');};
+el('productForm').addEventListener('submit',async e=>{e.preventDefault();const f=new FormData(e.target);const {error}=await db.from('candle_products').insert({name:f.get('name'),description:f.get('description')||'',price_toman:Number(f.get('price')),image_url:f.get('image')||null});if(error){alert('ذخیره محصول ناموفق بود: '+error.message);return;}alert('محصول ذخیره شد.');e.target.reset();await loadProducts();});
+async function loadOrders(){
+ const {data,error}=await db.from('candle_orders').select('id,tracking_code,customer_name,phone,address,note,total_toman,status,created_at,candle_order_items(product_name,unit_price_toman,quantity)').order('created_at',{ascending:false}).limit(100);
+ if(error){el('adminOrders').textContent='دریافت سفارش‌ها ناموفق بود: '+error.message;return;}
+ el('adminOrders').innerHTML=data.length?data.map(o=>'<div class="orderline" style="display:block"><b>'+safe(o.tracking_code)+' — '+safe(o.customer_name)+'</b><p class="small">موبایل: '+safe(o.phone)+' | '+safe(o.address)+'</p><p class="small">'+(o.candle_order_items||[]).map(i=>safe(i.product_name)+' × '+fmt(i.quantity)).join('، ')+'</p><b>'+fmt(o.total_toman)+' تومان</b><p class="small">'+safe(o.note)+'</p><select id="status-'+o.id+'">'+['ثبت شده','در حال آماده‌سازی','ارسال شده','تحویل شده','لغو شده'].map(s=>'<option '+(s===o.status?'selected':'')+'>'+s+'</option>').join('')+'</select> <button onclick="updateStatus(\''+o.id+'\')">ثبت وضعیت</button></div>').join(''):'هنوز سفارشی ثبت نشده است.';
+}
+window.updateStatus=async id=>{const status=document.getElementById('status-'+id).value;const {error}=await db.from('candle_orders').update({status}).eq('id',id);if(error)alert('تغییر وضعیت ناموفق بود: '+error.message);else{alert('وضعیت سفارش به‌روزرسانی شد.');loadOrders();}};
+el('refreshOrders').onclick=loadOrders;
+loadProducts();renderCart();db.auth.onAuthStateChange(()=>{});
+</script>
 </body></html>
