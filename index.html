@@ -10,8 +10,10 @@
 *{box-sizing:border-box}body{margin:0;font-family:Tahoma,Arial,sans-serif;background:var(--cream);color:var(--ink);line-height:1.85}
 header{position:sticky;top:0;z-index:5;background:#fffaf4ed;backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
 nav{max-width:1080px;margin:auto;padding:12px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
-.brand{font-weight:900;color:var(--deep);font-size:1.25rem}.brand span{color:var(--gold)}
-nav a,nav button{color:var(--deep);text-decoration:none;font-size:.9rem;margin:3px;border:0;background:none;cursor:pointer;font-family:inherit}
+.brand{font-weight:900;color:var(--deep);font-size:1.25rem;white-space:nowrap}.brand span{color:var(--gold)}
+nav>div:last-child{display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;min-width:0}
+nav a,nav button{color:var(--deep);text-decoration:none;font-size:.88rem;margin:0;padding:7px 10px;border:0;border-radius:10px;background:#fff0e3;cursor:pointer;font-family:inherit;white-space:nowrap}
+@media(max-width:560px){nav{justify-content:center;padding:10px 12px;gap:8px}nav>div:last-child{width:100%;gap:5px}nav a,nav button{font-size:.78rem;padding:7px 8px}}
 .hero{max-width:1080px;margin:28px auto 12px;padding:20px 18px;display:grid;grid-template-columns:1.2fr .8fr;gap:20px;align-items:center}
 .hero-card{background:linear-gradient(135deg,#ffe7d4,#fff7eb);border:1px solid #f2d5bf;border-radius:28px;padding:30px;box-shadow:0 12px 35px #9c67401a}
 h1{font-size:clamp(2rem,5vw,3.2rem);line-height:1.5;margin:0 0 10px;color:var(--deep)}.hero p{margin:0 0 20px;color:#725447}
